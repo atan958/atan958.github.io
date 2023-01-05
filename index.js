@@ -1,11 +1,12 @@
 const testElm = document.getElementById('testId');
-testElm.innerHTML = 'testing...';
+const currentIteration = 1;
+testElm.innerHTML = `testing #${currentIteration}...`;
 
-const testUrl = 'https://pokeapi.co/api/v2/pokemon/ditto';
+const testUrlV1 = 'https://pokeapi.co/api/v2/pokemon/ditto';
+const testUrlV2 = 'https://media-library-api.vistadevtest.workers.dev/api/test';
 
-fetch(testUrl)
-    .then(res => res.json())
+fetch(testUrlV2)
+    .then(res => res.text())
     .then(data => {
-        console.log(data.name);
-        testElm.innerHTML = `testing...${data.name}`;
+        testElm.innerHTML = `testing #${currentIteration}...${data}`;
     });
