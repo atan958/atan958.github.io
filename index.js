@@ -1,11 +1,12 @@
 const testElm = document.getElementById('testId');
-const currentIteration = 4;
+const currentIteration = 5;
 testElm.innerHTML = `testing #${currentIteration}...`;
 
 const testUrlV1 = 'https://pokeapi.co/api/v2/pokemon/ditto';
 const testUrlV2 = 'https://media-library-api.vistadevtest.workers.dev/api/upload/fried-chicken-v3.jpg';
+const testUrlV3 = 'https://media-library-api.vistadevtest.workers.dev/api/test';
 
-fetch(testUrlV2, { 
+fetch(testUrlV3, { 
     method: 'POST', 
     headers: {
         'X-Custom-Auth-Key': 'pussinboots'
