@@ -1,115 +1,101 @@
-const testElm = document.getElementById('testId');
-const currentIteration = 19;
-testElm.innerHTML = `testing #${currentIteration}...`;
+// MEDIA LIBRARY ENDPOINTS
+const ML_URL = `https://media-library-api.vistadevtest.workers.dev`;
+const ML_TEST_URL = `https://media-library-api.vistadevtest.workers.dev/api/test`;
 
-const testUrlV1 = 'https://pokeapi.co/api/v2/pokemon/ditto';
-const testUrlV2 = 'https://media-library-api.vistadevtest.workers.dev/api/test/weird2.jpg';
+// PAGE ELEMENTS
+const uploadResponseElm = document.getElementById('uploadResponse');
+const uploadFileNameInputElm = document.getElementById('uploadFileNameInput');
+const uploadFileInputElm = document.getElementById('uploadFileInput');
+const uploadFileLabelElm = document.getElementById('uploadFileLabel');
+const uploadFileBtnElm = document.getElementById('uploadFileBtn');
 
-// select file input
-const input = document.getElementById('avatar')
+const downloadFileBtnElm = document.getElementById('downloadFileBtn');
+const downloadFileNameInputElm = document.getElementById('downloadFileNameInput');
 
-// add event listener
-input.addEventListener('change', () => {
-    const file = input.files[0];
-    // uploadPicture(file);
-    convertImageFileToBinary(file);
-});
 
-function uploadPicture(file) {
-    const formData = new FormData();
-    formData.append("weird2", file);
-    formData.append("language", "eng");
-    formData.append("apikey", "helloworld");
-    callService(formData);
-}
+// UPLOAD
 
-function callService(formData) {
-    fetch(testUrlV2, { 
-        method: 'POST',
-        body: formData
-    })
-        .then(res => res.text())
-        .then(data => {
-            testElm.innerHTML = `testing #${currentIteration}...${data}`;
-        });
-}
-
-const convertImageFileToBinary = (imageFile) => {
-    const file = imageFile;
+const handleFileUpload = (file) => {
     const reader = new FileReader();
     reader.onload = function(event) {
         const data = event.target.result;
-        console.log(data);
-        callService(data);
+        const fileUploadName = `${getFileNameToUpload()}.${getFileExtension(file)}`;
+        uploadFile(fileUploadName, data);
     };
-    reader.readAsArrayBuffer(file); 
+    reader.readAsArrayBuffer(file);     // triggers the onload callback function
 }
 
-
-
-
-
-
-
-
-const uploadFileAsFormData = (file) => {
-    // add the file to the FormData object
-    const fd = new FormData()
-    fd.append('weird2.jpg', file)
-  
-    // send `POST` request
-    alert('Uploaded!');
-    console.log(fd);
-
-    fetch(testUrlV2, { 
+const uploadFile = (fileName, fileData) => {
+    fetch(`${ML_TEST_URL}/${fileName}`, { 
         method: 'POST',
-        body: fd
+        body: fileData,
     })
         .then(res => res.text())
         .then(data => {
-            testElm.innerHTML = `testing #${currentIteration}...${data}`;
+            uploadResponseElm.innerHTML = `${data}`;
+            resetFileUploadElms();
         });
 }
 
-
-async function uploadFileAsBinary(file) {
-    const binary = await getBinaryFromFile(file);
-    console.log('ANNOYING V1')
-    console.log(binary)
-
-    fetch(testUrlV2, { 
-        method: 'POST',
-        body: binary
-    })
-        .then(res => res.text())
-        .then(data => {
-            testElm.innerHTML = `testing #${currentIteration}...${data}`;
-        });
+const getFileNameToUpload = () => {
+    return uploadFileNameInputElm.value;
 }
 
-// Get binary without ugly callbacks using ES7
-function getBinaryFromFile(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-
-        reader.addEventListener("load", () => resolve(reader.result));
-        reader.addEventListener("error", err => reject(err));
-
-        reader.readAsDataURL(file);
-    });
+const getFileExtension = (file) => {
+    const fileName = file.name;
+    return fileName.split('.').pop();
 }
 
-
-async function uploadFileAsBinaryV2 (file) {
-    var reader = new FileReader();
-	reader.onload = function(e) {
-		// binary data
-        console.log('ANNOYING');
-		console.log(e.target.result);
-	};
-	reader.onerror = function(e) {
-		// error occurred
-		console.log('Error : ' + e.type);
-	};
-	reader.readAsBinaryString(file);
+const resetFileUploadElms = () => {
+    uploadFileNameInputElm.value = '';
+    uploadFileInputElm.value = null;
+    uploadFileLabelElm.innerText = 'Select Image';
 }
+
+uploadFileBtnElm.addEventListener('click', () => {
+    const file = uploadFileInputElm.files[0];
+    handleFileUpload(file);
+});
+
+uploadFileInputElm.addEventListener('change', () => {
+    const file = uploadFileInputElm.files[0];
+    uploadFileLabelElm.innerText = file.name;
+});
+
+
+
+// DOWNLOAD
+
+const handleFileDownloadAsync = async (fileName) => {
+    const imageObjectUrl = await downloadFileAsync(fileName);
+    loadImageBoxElm(imageObjectUrl);
+}
+
+const downloadFileAsync = async (fileName) => {
+    const downloadUrl = `${ML_URL}/${fileName}`;
+    console.log(downloadUrl);
+    const response = await fetch(downloadUrl);
+    const imageBlob = await response.blob();
+    console.log(imageBlob);
+    return URL.createObjectURL(imageBlob);
+}
+
+const loadImageBoxElm = (src) => {
+    const imageElm = document.createElement('img');
+    imageElm.src = src;
+    
+    imageElm.alt = 'testing...';
+    
+    const imageBoxElm = document.getElementById('imageBox');
+    imageBoxElm.innerHTML = '';
+    imageBoxElm.appendChild(imageElm);
+}
+
+const getFileNameToDownload = () => {
+    return downloadFileNameInputElm.value;
+}
+
+downloadFileBtnElm.addEventListener('click', () => {
+    const fileName = getFileNameToDownload();
+    handleFileDownloadAsync(fileName);
+});

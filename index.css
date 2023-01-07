@@ -1,0 +1,146 @@
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.flex-box {
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+}
+
+.flex-box .col {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    outline: 1px solid black;
+
+    font-size: 24px;
+}
+
+.flex-box .col .row {
+    display: flex;
+    flex-direction: column;
+
+    row-gap: 40px;
+
+    height: 100%;
+    width: calc(100% - 40px);
+    padding: 20px;
+
+    outline: 1px solid black;
+}
+
+/* DOWNLOAD */
+
+.flex-box .col .row .image-box {
+    width: 100%;
+    height: 480px;
+    background-color: rgb(245, 245, 245);
+    overflow: hidden;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.download .control-box input {
+    display: block !important;
+}
+
+img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+/* UPLOAD */
+
+.upload .control-box label {
+    color: black;
+    padding: 5px;
+    border: 2px solid black;
+    width: 240px;
+    height: 30px;
+    border-radius: 10px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.upload .control-box label:hover {
+    background-color: black;
+    border-color: rgb(255, 240, 240);
+    color: rgb(255, 240, 240);
+}
+
+.flex-box .col .row input {
+    display: none;
+}
+
+
+
+
+
+
+.file-name-input:focus {
+    outline: none;
+}
+
+
+
+
+
+.file-name-input {
+    width: 240px;
+    height: 20px;
+    padding: 10px;
+    background-color: white;
+
+    display: block !important;
+}
+
+
+/* Control Box */
+
+.control-box {
+    display: flex;
+    align-items: center;
+    column-gap: 20px;
+}
+
+.control-box input {
+    width: 280px;
+    height: 30px;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid rgb(200, 200, 200);
+    font-size: 20px;
+}
+
+.control-box button {
+    font-size: 20px;
+    padding: 10px;
+    height: 50px;
+    width: 160px;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.2);
+    cursor: pointer;
+}
+
+.control-box button:hover {
+    transform: scale(0.98);
+}
+
+.control-box button:active {
+    transform: scale(0.96);
+}
