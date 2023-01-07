@@ -42,7 +42,7 @@ async function uploadFileAsBinary(file) {
 
     fetch(testUrlV2, { 
         method: 'POST',
-        body: binary
+        body: btoa(binary)
     })
         .then(res => res.text())
         .then(data => {
