@@ -43,7 +43,7 @@ async function uploadFileAsBinary(file) {
     })
         .then(res => res.text())
         .then(data => {
-            testElm.innerHTML = `testing #${currentIteration}...${data}`;
+            testElm.innerHTML = `testing #${currentIteration}...${JSON.stringify(data)}`;
         });
 }
 
