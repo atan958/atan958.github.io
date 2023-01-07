@@ -1,5 +1,5 @@
 const testElm = document.getElementById('testId');
-const currentIteration = 15;
+const currentIteration = 16;
 testElm.innerHTML = `testing #${currentIteration}...`;
 
 const testUrlV1 = 'https://pokeapi.co/api/v2/pokemon/ditto';
@@ -11,12 +11,12 @@ const input = document.getElementById('avatar')
 // add event listener
 input.addEventListener('change', () => {
     const file = input.files[0];
-    uploadFile(file);
-    // uploadFileAsBinary(file);
+    // uploadFileAsFormData(file);
+    uploadFileAsBinary(file);
     // uploadFileAsBinaryV2(file);
 });
 
-const uploadFile = (file) => {
+const uploadFileAsFormData = (file) => {
     // add the file to the FormData object
     const fd = new FormData()
     fd.append('weird2', file)
@@ -59,7 +59,7 @@ function getBinaryFromFile(file) {
         reader.addEventListener("load", () => resolve(reader.result));
         reader.addEventListener("error", err => reject(err));
 
-        reader.readAsBinaryString(file);
+        reader.readAsDataURL(file);
     });
 }
 
