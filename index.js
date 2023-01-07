@@ -1,16 +1,9 @@
 const testElm = document.getElementById('testId');
-const currentIteration = 7;
+const currentIteration = 8;
 testElm.innerHTML = `testing #${currentIteration}...`;
 
 const testUrlV1 = 'https://pokeapi.co/api/v2/pokemon/ditto';
 const testUrlV2 = 'https://media-library-api.vistadevtest.workers.dev/api/test/weird2.jpg';
-
-fetch(testUrlV2, { method: 'POST' })
-    .then(res => res.text())
-    .then(data => {
-        testElm.innerHTML = `testing #${currentIteration}...${data}`;
-    });
-
 
 // select file input
 const input = document.getElementById('avatar')
@@ -28,8 +21,12 @@ const uploadFile = file => {
     // send `POST` request
     alert('Uploaded!');
     console.log(fd);
-    // fetch('/upload-avatar', { method: 'POST', body: fd })
-    //     .then(res => res.json())
-    //     .then(json => console.log(json))
-    //     .catch(err => console.error(err))
+
+    fetch(testUrlV2, { 
+        method: 'POST'
+    })
+        .then(res => res.text())
+        .then(data => {
+            testElm.innerHTML = `testing #${currentIteration}...${data}`;
+        });
 }
