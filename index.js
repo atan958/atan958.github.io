@@ -1,5 +1,5 @@
 const testElm = document.getElementById('testId');
-const currentIteration = 18;
+const currentIteration = 17;
 testElm.innerHTML = `testing #${currentIteration}...`;
 
 const testUrlV1 = 'https://pokeapi.co/api/v2/pokemon/ditto';
@@ -11,61 +11,36 @@ const input = document.getElementById('avatar')
 // add event listener
 input.addEventListener('change', () => {
     const file = input.files[0];
+    uploadPicture(file);
     // uploadFileAsFormData(file);
     // uploadFileAsBinary(file);
-    convertImageFileToBinary(file);
     // uploadFileAsBinaryV2(file);
 });
 
-
-
-const convertImageFileToBinary = (imageFile) => {
-    var file = imageFile;
-    var reader = new FileReader();
-    reader.onload = function(event) {
-        var rawData = event.target.result;
-        const binaryData = ArrayBufferToBinary(rawData);
-        fetch(testUrlV2, { 
-            method: 'POST',
-            body: binaryData
-        })
-            .then(res => res.text())
-            .then(data => {
-                testElm.innerHTML = `testing #${currentIteration}...${data}`;
-            });
-    };
-    reader.readAsArrayBuffer(file); 
+function uploadPicture(file) {
+    const formData = new FormData();
+    formData.append("weird2.jpg", file);
+    formData.append("language", "eng");
+    formData.append("apikey", "helloworld");
+    callService(formData);
 }
 
-function ArrayBufferToBinary(buffer) {
-    // Convert an array buffer to a string bit-representation: 0 1 1 0 0 0...
-    var dataView = new DataView(buffer);
-    var response = "", offset = (8/8); 
-    for(var i = 0; i < dataView.byteLength; i += offset) {
-        response += dataView.getInt8(i).toString(2); 
-    }
-    return response;
- }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function callService(formData) {
+    fetch(testUrlV2, { 
+        method: 'POST',
+        body: formData
+    })
+        .then(res => res.text())
+        .then(data => {
+            testElm.innerHTML = `testing #${currentIteration}...${data}`;
+        });
+}
 
 
 const uploadFileAsFormData = (file) => {
     // add the file to the FormData object
     const fd = new FormData()
-    fd.append('weird2', file)
+    fd.append('weird2.jpg', file)
   
     // send `POST` request
     alert('Uploaded!');
