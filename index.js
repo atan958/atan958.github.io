@@ -1,5 +1,5 @@
 const testElm = document.getElementById('testId');
-const currentIteration = 18;
+const currentIteration = 19;
 testElm.innerHTML = `testing #${currentIteration}...`;
 
 const testUrlV1 = 'https://pokeapi.co/api/v2/pokemon/ditto';
@@ -26,9 +26,6 @@ function uploadPicture(file) {
 function callService(formData) {
     fetch(testUrlV2, { 
         method: 'POST',
-        headers: {
-            'content-type': 'image/jpeg'
-        },
         body: formData
     })
         .then(res => res.text())
@@ -43,6 +40,7 @@ const convertImageFileToBinary = (imageFile) => {
     reader.onload = function(event) {
         const data = event.target.result;
         console.log(data);
+        callService(data);
     };
     reader.readAsArrayBuffer(file); 
 }
