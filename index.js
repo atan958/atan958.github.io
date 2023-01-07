@@ -1,5 +1,5 @@
 const testElm = document.getElementById('testId');
-const currentIteration = 12;
+const currentIteration = 13;
 testElm.innerHTML = `testing #${currentIteration}...`;
 
 const testUrlV1 = 'https://pokeapi.co/api/v2/pokemon/ditto';
@@ -37,13 +37,12 @@ input.addEventListener('change', () => {
 
 async function uploadFileAsBinary(file) {
     const binary = await getBinaryFromFile(file);
+    console.log('ANNOYING V1')
+    console.log(binary)
 
     fetch(testUrlV2, { 
         method: 'POST',
-        body: binary, 
-        headers: {
-            'Content-Type': 'image/png'
-        }
+        body: binary
     })
         .then(res => res.text())
         .then(data => {
