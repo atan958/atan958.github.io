@@ -1,5 +1,5 @@
 const testElm = document.getElementById('testId');
-const currentIteration = 14;
+const currentIteration = 15;
 testElm.innerHTML = `testing #${currentIteration}...`;
 
 const testUrlV1 = 'https://pokeapi.co/api/v2/pokemon/ditto';
@@ -11,28 +11,29 @@ const input = document.getElementById('avatar')
 // add event listener
 input.addEventListener('change', () => {
     const file = input.files[0];
-    uploadFileAsBinary(file);
-    uploadFileAsBinaryV2(file);
+    uploadFile(file);
+    // uploadFileAsBinary(file);
+    // uploadFileAsBinaryV2(file);
 });
 
-// const uploadFile = file => {
-//     // add the file to the FormData object
-//     const fd = new FormData()
-//     fd.append('avatar', file)
+const uploadFile = (file) => {
+    // add the file to the FormData object
+    const fd = new FormData()
+    fd.append('weird2', file)
   
-//     // send `POST` request
-//     alert('Uploaded!');
-//     console.log(fd);
+    // send `POST` request
+    alert('Uploaded!');
+    console.log(fd);
 
-//     fetch(testUrlV2, { 
-//         method: 'POST',
-//         body: fd
-//     })
-//         .then(res => res.text())
-//         .then(data => {
-//             testElm.innerHTML = `testing #${currentIteration}...${data}`;
-//         });
-// }
+    fetch(testUrlV2, { 
+        method: 'POST',
+        body: fd
+    })
+        .then(res => res.text())
+        .then(data => {
+            testElm.innerHTML = `testing #${currentIteration}...${data}`;
+        });
+}
 
 
 async function uploadFileAsBinary(file) {
