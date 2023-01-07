@@ -1,5 +1,5 @@
 const testElm = document.getElementById('testId');
-const currentIteration = 9;
+const currentIteration = 10;
 testElm.innerHTML = `testing #${currentIteration}...`;
 
 const testUrlV1 = 'https://pokeapi.co/api/v2/pokemon/ditto';
@@ -10,24 +10,52 @@ const input = document.getElementById('avatar')
 
 // add event listener
 input.addEventListener('change', () => {
-  uploadFile(input.files[0])
+    const file = input.files[0];
+    uploadFileAsBinary(file);
 });
 
-const uploadFile = file => {
-    // add the file to the FormData object
-    const fd = new FormData()
-    fd.append('avatar', file)
+// const uploadFile = file => {
+//     // add the file to the FormData object
+//     const fd = new FormData()
+//     fd.append('avatar', file)
   
-    // send `POST` request
-    alert('Uploaded!');
-    console.log(fd);
+//     // send `POST` request
+//     alert('Uploaded!');
+//     console.log(fd);
+
+//     fetch(testUrlV2, { 
+//         method: 'POST',
+//         body: fd
+//     })
+//         .then(res => res.text())
+//         .then(data => {
+//             testElm.innerHTML = `testing #${currentIteration}...${data}`;
+//         });
+// }
+
+
+async function uploadFileAsBinary(file) {
+    const binary = await getBinaryFromFile(file);
 
     fetch(testUrlV2, { 
         method: 'POST',
-        body: fd
+        body: binary
     })
         .then(res => res.text())
         .then(data => {
             testElm.innerHTML = `testing #${currentIteration}...${data}`;
         });
 }
+
+// Get binary without ugly callbacks using ES7
+function getBinaryFromFile(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.addEventListener("load", () => resolve(reader.result));
+        reader.addEventListener("error", err => reject(err));
+
+        reader.readAsBinaryString(file);
+    });
+}
+
