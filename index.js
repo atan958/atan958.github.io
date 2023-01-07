@@ -12,6 +12,7 @@ const input = document.getElementById('avatar')
 input.addEventListener('change', () => {
     const file = input.files[0];
     uploadFileAsBinary(file);
+    uploadFileAsBinaryV2(file);
 });
 
 // const uploadFile = file => {
@@ -39,7 +40,10 @@ async function uploadFileAsBinary(file) {
 
     fetch(testUrlV2, { 
         method: 'POST',
-        body: binary
+        body: binary, 
+        headers: {
+            'Content-Type': 'image/png'
+        }
     })
         .then(res => res.text())
         .then(data => {
@@ -59,3 +63,17 @@ function getBinaryFromFile(file) {
     });
 }
 
+
+async function uploadFileAsBinaryV2 (file) {
+    var reader = new FileReader();
+	reader.onload = function(e) {
+		// binary data
+        console.log('ANNOYING');
+		console.log(e.target.result);
+	};
+	reader.onerror = function(e) {
+		// error occurred
+		console.log('Error : ' + e.type);
+	};
+	reader.readAsBinaryString(file);
+}
