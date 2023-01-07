@@ -17,7 +17,7 @@ input.addEventListener('change', () => {
 
 function uploadPicture(file) {
     const formData = new FormData();
-    formData.append("weird2.jpg", file);
+    formData.append("weird2", file);
     formData.append("language", "eng");
     formData.append("apikey", "helloworld");
     callService(formData);
