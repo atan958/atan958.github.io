@@ -1,5 +1,5 @@
 const testElm = document.getElementById('testId');
-const currentIteration = 8;
+const currentIteration = 9;
 testElm.innerHTML = `testing #${currentIteration}...`;
 
 const testUrlV1 = 'https://pokeapi.co/api/v2/pokemon/ditto';
@@ -23,7 +23,8 @@ const uploadFile = file => {
     console.log(fd);
 
     fetch(testUrlV2, { 
-        method: 'POST'
+        method: 'POST',
+        body: fd
     })
         .then(res => res.text())
         .then(data => {
