@@ -1,5 +1,5 @@
 const testElm = document.getElementById('testId');
-const currentIteration = 17;
+const currentIteration = 18;
 testElm.innerHTML = `testing #${currentIteration}...`;
 
 const testUrlV1 = 'https://pokeapi.co/api/v2/pokemon/ditto';
@@ -12,9 +12,6 @@ const input = document.getElementById('avatar')
 input.addEventListener('change', () => {
     const file = input.files[0];
     uploadPicture(file);
-    // uploadFileAsFormData(file);
-    // uploadFileAsBinary(file);
-    // uploadFileAsBinaryV2(file);
 });
 
 function uploadPicture(file) {
@@ -28,6 +25,9 @@ function uploadPicture(file) {
 function callService(formData) {
     fetch(testUrlV2, { 
         method: 'POST',
+        headers: {
+            'content-type': 'image/jpeg'
+        },
         body: formData
     })
         .then(res => res.text())
