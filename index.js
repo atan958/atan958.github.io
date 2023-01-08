@@ -2,7 +2,6 @@
 const ML_URL = `https://media-library-api.vistadevtest.workers.dev`;
 const ML_UPLOAD_URL = `https://media-library-api.vistadevtest.workers.dev/api/upload`;
 const ML_DELETE_URL = `https://media-library-api.vistadevtest.workers.dev/api/delete`;
-const ML_TEST_URL = `https://media-library-api.vistadevtest.workers.dev/api/test`;
 
 const loadingGifUrl = 'https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif';
 
@@ -15,33 +14,41 @@ const deleteFileBtnElm = document.getElementById('deleteFileBtn');
 
 // UPLOAD
 
-const handleFileUpload = (file) => {
+const handleFileUpload = () => {
+    const file = uploadFileInputElm.files[0];
+    if (!file) {
+        setUploadResponse('No file selected');
+        return;
+    }
+
     const reader = new FileReader();
-    reader.onload = function(event) {
-        const data = event.target.result;
-        const fileUploadName = `${getFileNameToUpload()}.${getFileExtension(file)}`;
-        uploadFile(fileUploadName, data);
-    };
-    reader.readAsArrayBuffer(file);     // triggers the onload callback function
+    reader.onload = async (e) => {
+        const fileData = e.target.result;
+        const fileUploadName = `${getUploadNameOfFile()}.${getFileExtension(file)}`;
+        try {
+            const responseData = await uploadFileAsync(fileUploadName, fileData);
+            setUploadResponse(responseData);
+            resetUploadSection();
+        }
+        catch (e) {
+            setUploadResponse(e.message);
+        }
+    }
+    reader.readAsArrayBuffer(file);     // triggers the onload callback function of the FileReader
 }
 
-const uploadFile = (fileName, fileData) => {
+const setUploadResponse = (message) =>  {
     const uploadResponseElm = document.getElementById('uploadResponse');
-    fetch(`${ML_UPLOAD_URL}/${fileName}`, { 
-        method: 'POST',
-        body: fileData,
-    })
-        .then(res => res.text())
-        .then(data => {
-            uploadResponseElm.innerHTML = `${data}`;
-            resetFileUploadElms();
-        })
-        .catch(error => {
-            uploadResponseElm.innerHTML = `${error}`;
-        });
+    uploadResponseElm.innerText = message;
 }
 
-const getFileNameToUpload = () => {
+const uploadFileAsync = async (fileName, fileData) => {
+    const response = await fetch(`${ML_UPLOAD_URL}/${fileName}`, { method: 'POST', body: fileData });
+    const data = await response.text();
+    return data;
+}
+
+const getUploadNameOfFile = () => {
     const uploadFileNameInputElm = document.getElementById('uploadFileNameInput');
     return uploadFileNameInputElm.value;
 }
@@ -51,7 +58,7 @@ const getFileExtension = (file) => {
     return fileName.split('.').pop();
 }
 
-const resetFileUploadElms = () => {
+const resetUploadSection = () => {
     const uploadFileNameInputElm = document.getElementById('uploadFileNameInput');
     uploadFileNameInputElm.value = '';
     uploadFileInputElm.value = null;
@@ -59,10 +66,7 @@ const resetFileUploadElms = () => {
     uploadFileLabelElm.innerText = 'Select Image';
 }
 
-uploadFileBtnElm.addEventListener('click', () => {
-    const file = uploadFileInputElm.files[0];
-    handleFileUpload(file);
-});
+uploadFileBtnElm.addEventListener('click', handleFileUpload);
 
 uploadFileInputElm.addEventListener('change', () => {
     const file = uploadFileInputElm.files[0];
@@ -71,13 +75,12 @@ uploadFileInputElm.addEventListener('change', () => {
 });
 
 
-
 // DOWNLOAD
 
 const handleFileDownloadAsync = async (fileName) => {
+    loadImageBox(loadingGifUrl);
+    setDownloadResponse('Loading...');
     try {
-        loadImageBox(loadingGifUrl);
-        setDownloadResponse('Loading...');
         const imageObjectUrl = await downloadFileAsync(fileName);
         loadImageBox(imageObjectUrl);
         setDownloadResponse(`\"${fileName}\" was successfully downloaded.`);
