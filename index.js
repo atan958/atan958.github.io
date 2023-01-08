@@ -74,8 +74,20 @@ uploadFileInputElm.addEventListener('change', () => {
 // DOWNLOAD
 
 const handleFileDownloadAsync = async (fileName) => {
-    const imageObjectUrl = await downloadFileAsync(fileName);
-    loadImageBoxElm(imageObjectUrl);
+    try {
+        setDownloadResponse('Loading...');
+        const imageObjectUrl = await downloadFileAsync(fileName);
+        loadImageBoxElm(imageObjectUrl);
+        setDownloadResponse(`\"${fileName}\" was successfully downloaded.`);
+    }
+    catch (e) {
+        setDownloadResponse(`\"${fileName}\" does not exist.`);
+    }
+}
+
+const setDownloadResponse = (message) =>  {
+    const downloadResponseElm = document.getElementById('downloadResponse');
+    downloadResponseElm.innerText = message;
 }
 
 const downloadFileAsync = async (fileName) => {
