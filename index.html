@@ -31,17 +31,25 @@
                 <h1>Upload</h1>
                 <div class="control-box">
                     <input type="text" class="file-name-input" id="uploadFileNameInput" name="uploadFileNameInput" placeholder="Name of image after upload">
-                    <label id="uploadFileLabel" for="uploadFileInput" class="btn">Select Image</label>
-                    <input id="uploadFileInput" type="file">
+                    <label id="uploadFileLabel" for="uploadFileInput" class="file-label">Select Image</label>
+                    <input id="uploadFileInput" class="file-input" type="file">
                     <button id="uploadFileBtn">Upload File</button>
                 </div>
                 
-                <p id="uploadResponse">
-                    ...waiting...
+                <p id="uploadResponse" class="response-text">
+                    ...
                 </p>
             </div>
             <div class="row">
                 <h1>Delete</h1>
+                <div class="control-box">
+                    <input type="text" class="file-name-input" id="deleteFileNameInput" name="deleteFileNameInput" placeholder="Name of image to delete">
+                    <button id="deleteFileBtn">Delete File</button>
+                </div>
+                
+                <p id="deleteResponse" class="response-text">
+                    ...
+                </p>
             </div>
         </div>
     </div>

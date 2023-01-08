@@ -1,5 +1,7 @@
 // MEDIA LIBRARY ENDPOINTS
 const ML_URL = `https://media-library-api.vistadevtest.workers.dev`;
+const ML_UPLOAD_URL = `https://media-library-api.vistadevtest.workers.dev/api/upload`;
+const ML_DELETE_URL = `https://media-library-api.vistadevtest.workers.dev/api/delete`;
 const ML_TEST_URL = `https://media-library-api.vistadevtest.workers.dev/api/test`;
 
 // PAGE ELEMENTS
@@ -11,6 +13,8 @@ const uploadFileBtnElm = document.getElementById('uploadFileBtn');
 
 const downloadFileBtnElm = document.getElementById('downloadFileBtn');
 const downloadFileNameInputElm = document.getElementById('downloadFileNameInput');
+
+const deleteFileBtnElm = document.getElementById('deleteFileBtn');
 
 
 // UPLOAD
@@ -26,7 +30,7 @@ const handleFileUpload = (file) => {
 }
 
 const uploadFile = (fileName, fileData) => {
-    fetch(`${ML_TEST_URL}/${fileName}`, { 
+    fetch(`${ML_UPLOAD_URL}/${fileName}`, { 
         method: 'POST',
         body: fileData,
     })
@@ -34,6 +38,9 @@ const uploadFile = (fileName, fileData) => {
         .then(data => {
             uploadResponseElm.innerHTML = `${data}`;
             resetFileUploadElms();
+        })
+        .catch(error => {
+            uploadResponseElm.innerHTML = `${error}`;
         });
 }
 
@@ -98,4 +105,29 @@ const getFileNameToDownload = () => {
 downloadFileBtnElm.addEventListener('click', () => {
     const fileName = getFileNameToDownload();
     handleFileDownloadAsync(fileName);
+});
+
+
+// DELETE
+
+const handleFileDeleteAsync = async (fileName) =>  {
+    const data = await deleteFileAsync(fileName);
+    const deleteResponseElm = document.getElementById('deleteResponse');
+    deleteResponseElm.innerText = data;
+}
+
+const deleteFileAsync = async (fileName) => {
+    const response = await fetch(`${ML_DELETE_URL}/${fileName}`, { method: 'POST' });
+    const data = await response.text();
+    return data;
+}
+
+const getFileNameToDelete = () => {
+    const deleteFileNameInputElm = document.getElementById('deleteFileNameInput');
+    return deleteFileNameInputElm.value;
+}
+
+deleteFileBtnElm.addEventListener('click', () => {
+    const fileName = getFileNameToDelete();
+    handleFileDeleteAsync(fileName);
 });

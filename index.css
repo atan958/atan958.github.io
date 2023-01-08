@@ -5,6 +5,12 @@
     font-family: 'Roboto', sans-serif;
 }
 
+h1, p {
+    pointer-events: none;
+}
+
+/* Flex Box */
+
 .flex-box {
     background-color: rgb(255, 255, 255);
     display: flex;
@@ -49,19 +55,15 @@
     align-items: center;
 }
 
-.download .control-box input {
-    display: block !important;
-}
-
 img {
     max-height: 100%;
     max-width: 100%;
     object-fit: contain;
 }
 
-/* UPLOAD */
+/* File Input Label */
 
-.upload .control-box label {
+.file-label {
     color: black;
     padding: 5px;
     border: 2px solid black;
@@ -78,38 +80,46 @@ img {
     transition: 0.2s ease;
 }
 
-.upload .control-box label:hover {
+.file-label:hover {
     background-color: black;
     border-color: rgb(255, 240, 240);
     color: rgb(255, 240, 240);
 }
 
-.flex-box .col .row input {
+
+/* File Input */
+
+.file-input {
     display: none;
 }
 
 
+/* Filename Text Input */
 
+.file-name-input {
+    width: 300px;
+    padding: 10px;
+    background-color: white;
 
+    display: block !important;
 
+    height: 30px;
+    border: 1px solid rgb(200, 200, 200);
+    font-size: 20px;
+    transition: 0.1s ease;
+}
 
 .file-name-input:focus {
     outline: none;
 }
 
-
-
-
-
-.file-name-input {
-    width: 240px;
-    height: 20px;
-    padding: 10px;
-    background-color: white;
-
-    display: block !important;
+.file-name-input:hover {
+    transform: scale(0.98);
 }
 
+.file-name-input:active {
+    transform: scale(0.96);
+}
 
 /* Control Box */
 
@@ -119,28 +129,28 @@ img {
     column-gap: 20px;
 }
 
-.control-box input {
-    width: 280px;
-    height: 30px;
-    padding: 10px;
-    background-color: white;
-    border: 1px solid rgb(200, 200, 200);
-    font-size: 20px;
-}
-
 .control-box button {
     font-size: 20px;
     padding: 10px;
     height: 50px;
     width: 160px;
-    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 2px 3px 0 rgba(0,0,0,0.2);
+    background-color: rgb(235, 235, 235);
     cursor: pointer;
 }
 
 .control-box button:hover {
-    transform: scale(0.98);
+    transform: scale(0.97);
+    background-color: rgb(230, 230, 230);
 }
 
 .control-box button:active {
-    transform: scale(0.96);
+    transform: scale(0.94);
+    background-color: rgb(225, 225, 225);
+}
+
+/* Response Text */
+
+.response-text {
+    color: gray;
 }
