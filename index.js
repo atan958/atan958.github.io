@@ -24,7 +24,7 @@ const handleFileUpload = () => {
     const reader = new FileReader();
     reader.onload = async (e) => {
         const fileData = e.target.result;
-        const fileUploadName = `${getUploadNameOfFile()}.${getFileExtension(file)}`;
+        const fileUploadName = `${getUploadNameOfFile(file)}.${getFileExtension(file)}`;
         try {
             const responseData = await uploadFileAsync(fileUploadName, fileData);
             setUploadResponse(responseData);
@@ -48,9 +48,16 @@ const uploadFileAsync = async (fileName, fileData) => {
     return data;
 }
 
-const getUploadNameOfFile = () => {
+const getUploadNameOfFile = (file) => {
     const uploadFileNameInputElm = document.getElementById('uploadFileNameInput');
-    return uploadFileNameInputElm.value;
+    const fileUploadName = uploadFileNameInputElm.value ? uploadFileNameInputElm.value : getFileNameWithoutExtension(file);
+    return fileUploadName;
+}
+
+const getFileNameWithoutExtension = (file) => {
+    const sectionArr = file.name.split('.');
+    sectionArr.pop();
+    return sectionArr.join('.');
 }
 
 const getFileExtension = (file) => {
@@ -89,7 +96,7 @@ const handleFileDownloadAsync = async () => {
     }
     catch (e) {
         loadImageBox(null);
-        setDownloadResponse(`\"${fileName}\" does not exist.`);
+        setDownloadResponse(`\"${fileName}\" does not exist`);
     }
 }
 
@@ -125,10 +132,25 @@ downloadFileBtnElm.addEventListener('click', handleFileDownloadAsync);
 
 // DELETE
 
-const handleFileDeleteAsync = async (fileName) =>  {
-    const data = await deleteFileAsync(fileName);
+const handleFileDeleteAsync = async () =>  {
+    const fileName = getFileNameToDelete();
+    if (!fileName) {
+        setDeleteResponse('No image specified');
+        return;
+    }
+
+    try {
+        const responseData = await deleteFileAsync(fileName);
+        setDeleteResponse(responseData);
+    }
+    catch (e) {
+        setDeleteResponse(`\"${fileName}\" does not exist`);
+    }
+}
+
+const setDeleteResponse = (message) =>  {
     const deleteResponseElm = document.getElementById('deleteResponse');
-    deleteResponseElm.innerText = data;
+    deleteResponseElm.innerText = message;
 }
 
 const deleteFileAsync = async (fileName) => {
@@ -142,7 +164,4 @@ const getFileNameToDelete = () => {
     return deleteFileNameInputElm.value;
 }
 
-deleteFileBtnElm.addEventListener('click', () => {
-    const fileName = getFileNameToDelete();
-    handleFileDeleteAsync(fileName);
-});
+deleteFileBtnElm.addEventListener('click', handleFileDeleteAsync);
