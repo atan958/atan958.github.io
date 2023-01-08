@@ -4,16 +4,12 @@ const ML_UPLOAD_URL = `https://media-library-api.vistadevtest.workers.dev/api/up
 const ML_DELETE_URL = `https://media-library-api.vistadevtest.workers.dev/api/delete`;
 const ML_TEST_URL = `https://media-library-api.vistadevtest.workers.dev/api/test`;
 
+const loadingGifUrl = 'https://media.tenor.com/On7kvXhzml4AAAAj/loading-gif.gif';
+
 // PAGE ELEMENTS
-const uploadResponseElm = document.getElementById('uploadResponse');
-const uploadFileNameInputElm = document.getElementById('uploadFileNameInput');
 const uploadFileInputElm = document.getElementById('uploadFileInput');
-const uploadFileLabelElm = document.getElementById('uploadFileLabel');
 const uploadFileBtnElm = document.getElementById('uploadFileBtn');
-
 const downloadFileBtnElm = document.getElementById('downloadFileBtn');
-const downloadFileNameInputElm = document.getElementById('downloadFileNameInput');
-
 const deleteFileBtnElm = document.getElementById('deleteFileBtn');
 
 
@@ -30,6 +26,7 @@ const handleFileUpload = (file) => {
 }
 
 const uploadFile = (fileName, fileData) => {
+    const uploadResponseElm = document.getElementById('uploadResponse');
     fetch(`${ML_UPLOAD_URL}/${fileName}`, { 
         method: 'POST',
         body: fileData,
@@ -45,6 +42,7 @@ const uploadFile = (fileName, fileData) => {
 }
 
 const getFileNameToUpload = () => {
+    const uploadFileNameInputElm = document.getElementById('uploadFileNameInput');
     return uploadFileNameInputElm.value;
 }
 
@@ -54,8 +52,10 @@ const getFileExtension = (file) => {
 }
 
 const resetFileUploadElms = () => {
+    const uploadFileNameInputElm = document.getElementById('uploadFileNameInput');
     uploadFileNameInputElm.value = '';
     uploadFileInputElm.value = null;
+    const uploadFileLabelElm = document.getElementById('uploadFileLabel');
     uploadFileLabelElm.innerText = 'Select Image';
 }
 
@@ -66,6 +66,7 @@ uploadFileBtnElm.addEventListener('click', () => {
 
 uploadFileInputElm.addEventListener('change', () => {
     const file = uploadFileInputElm.files[0];
+    const uploadFileLabelElm = document.getElementById('uploadFileLabel');
     uploadFileLabelElm.innerText = file.name;
 });
 
@@ -75,12 +76,14 @@ uploadFileInputElm.addEventListener('change', () => {
 
 const handleFileDownloadAsync = async (fileName) => {
     try {
+        loadImageBox(loadingGifUrl);
         setDownloadResponse('Loading...');
         const imageObjectUrl = await downloadFileAsync(fileName);
-        loadImageBoxElm(imageObjectUrl);
+        loadImageBox(imageObjectUrl);
         setDownloadResponse(`\"${fileName}\" was successfully downloaded.`);
     }
     catch (e) {
+        loadImageBox(null);
         setDownloadResponse(`\"${fileName}\" does not exist.`);
     }
 }
@@ -92,18 +95,15 @@ const setDownloadResponse = (message) =>  {
 
 const downloadFileAsync = async (fileName) => {
     const downloadUrl = `${ML_URL}/${fileName}`;
-    console.log(downloadUrl);
     const response = await fetch(downloadUrl);
     const imageBlob = await response.blob();
-    console.log(imageBlob);
     return URL.createObjectURL(imageBlob);
 }
 
-const loadImageBoxElm = (src) => {
+const loadImageBox = (src) => {
     const imageElm = document.createElement('img');
     imageElm.src = src;
-    
-    imageElm.alt = 'testing...';
+    imageElm.alt = 'media-library';
     
     const imageBoxElm = document.getElementById('imageBox');
     imageBoxElm.innerHTML = '';
@@ -111,6 +111,7 @@ const loadImageBoxElm = (src) => {
 }
 
 const getFileNameToDownload = () => {
+    const downloadFileNameInputElm = document.getElementById('downloadFileNameInput');
     return downloadFileNameInputElm.value;
 }
 
