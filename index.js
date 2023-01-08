@@ -77,7 +77,9 @@ uploadFileInputElm.addEventListener('change', () => {
 
 // DOWNLOAD
 
-const handleFileDownloadAsync = async (fileName) => {
+const handleFileDownloadAsync = async () => {
+    const fileName = getFileNameToDownload();
+
     loadImageBox(loadingGifUrl);
     setDownloadResponse('Loading...');
     try {
@@ -118,10 +120,7 @@ const getFileNameToDownload = () => {
     return downloadFileNameInputElm.value;
 }
 
-downloadFileBtnElm.addEventListener('click', () => {
-    const fileName = getFileNameToDownload();
-    handleFileDownloadAsync(fileName);
-});
+downloadFileBtnElm.addEventListener('click', handleFileDownloadAsync);
 
 
 // DELETE
